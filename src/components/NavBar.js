@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {
 	AppBar,
 	IconButton,
@@ -12,7 +13,12 @@ import CreateDish from './CreateDish';
 import SearchDish from './SearchDish';
 
 const useStyles = makeStyles(() => ({
-	title: { flexGrow: 1, display: 'block' }
+	title: {
+		flexGrow: 1,
+		display: 'block',
+		textDecoration: 'none',
+		color: '#fff'
+	}
 }));
 
 const NavBar = ({ searchingWord, setSearchingWord }) => {
@@ -25,9 +31,9 @@ const NavBar = ({ searchingWord, setSearchingWord }) => {
 					<IconButton edge="start" color="inherit">
 						<MenuIcon />
 					</IconButton>
-					<Typography className={classes.title} variant="h6">
-						CookItSam
-					</Typography>
+					<Link to="/" className={classes.title}>
+						<Typography variant="h6">CookItSam</Typography>
+					</Link>
 					<SearchDish
 						searchingWord={searchingWord}
 						setSearchingWord={setSearchingWord}

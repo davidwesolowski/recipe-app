@@ -66,7 +66,22 @@ const App = () => {
 										/>
 									)}
 								/>
-								<Route path="/dish" component={DishDetails} />
+								<Route
+									path="/:id"
+									render={props => {
+										const dish = dishes.find(
+											dish =>
+												dish.id ===
+												+props.match.params.id
+										);
+										return (
+											<DishDetails
+												{...props}
+												dish={dish}
+											/>
+										);
+									}}
+								/>
 							</Switch>
 							<Footer />
 						</Router>

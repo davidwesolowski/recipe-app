@@ -78,13 +78,18 @@ const useStyles = makeStyles(() => ({
 	alert: {
 		marginTop: '.5rem'
 	},
-	'@global': {
-		'.MuiTypography-h6': {
-			display: 'flex',
-			width: '100%',
-			justifyContent: 'space-between'
-		}
+	dialogHeader: {
+		display: 'flex',
+		justifyContent: 'space-between',
+		width: '100%'
 	}
+	// '@global': {
+	// 	'.MuiTypography-h6': {
+	// 		display: 'flex',
+	// 		width: '100%',
+	// 		justifyContent: 'space-between'
+	// 	}
+	// }
 }));
 
 const CreateDish = () => {
@@ -192,22 +197,24 @@ const CreateDish = () => {
 				classes={{ paperScrollPaper: classes.paperScrollPaper }}
 			>
 				<DialogTitle>
-					<Typography>Dodaj przepis:</Typography>
-					<IconButton
-						className={classes.closeButton}
-						onClick={() => {
-							setOpen(!open);
-							setDish(defaultDish);
-							setTextFieldsState(defaultTextFieldState);
-							setNewFilter(false);
-							file.current = null;
-						}}
-					>
-						<CloseIcon
-							className={classes.closeIcon}
-							fontSize="large"
-						/>
-					</IconButton>
+					<div className={classes.dialogHeader}>
+						<Typography>Dodaj przepis:</Typography>
+						<IconButton
+							className={classes.closeButton}
+							onClick={() => {
+								setOpen(!open);
+								setDish(defaultDish);
+								setTextFieldsState(defaultTextFieldState);
+								setNewFilter(false);
+								file.current = null;
+							}}
+						>
+							<CloseIcon
+								className={classes.closeIcon}
+								fontSize="large"
+							/>
+						</IconButton>
+					</div>
 				</DialogTitle>
 				<DialogContent dividers>
 					<form onSubmit={handleSubmit}>

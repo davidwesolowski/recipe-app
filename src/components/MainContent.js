@@ -51,11 +51,7 @@ const MainContent = ({ searchingWord }) => {
 						)
 					) : (
 						<h1>No dishes found!</h1>
-					)
-					/* {dishes.map(dish => (
-					<Dish key={dish.id} dish={dish} />
-				))} */
-					}
+					)}
 				</div>
 			</Paper>
 		</Grid>
