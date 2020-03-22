@@ -83,13 +83,6 @@ const useStyles = makeStyles(() => ({
 		justifyContent: 'space-between',
 		width: '100%'
 	}
-	// '@global': {
-	// 	'.MuiTypography-h6': {
-	// 		display: 'flex',
-	// 		width: '100%',
-	// 		justifyContent: 'space-between'
-	// 	}
-	// }
 }));
 
 const CreateDish = () => {
