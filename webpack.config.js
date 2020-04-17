@@ -1,6 +1,8 @@
 const path = require('path');
+//const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
 const config = {
-	entry: './src/index.js',
+	entry: ['@babel/polyfill', './src/index.js'],
 	output: {
 		path: path.join(__dirname, 'public/dist'),
 		filename: 'bundle.js'
@@ -28,9 +30,17 @@ const config = {
 	devtool: 'eval-cheap-source-map',
 	devServer: {
 		contentBase: path.join(__dirname, 'public'),
+		compress: true,
 		historyApiFallback: true,
 		publicPath: '/dist/'
+	},
+	resolve: {
+		extensions: ['.mjs', '.js', '.jsx']
+	},
+	node: {
+		fs: 'empty'
 	}
+	//plugins: [new BundleAnalyzerPlugin()]
 };
 
 module.exports = config;

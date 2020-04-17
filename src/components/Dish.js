@@ -1,19 +1,26 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ButtonBase, Typography } from '@material-ui/core';
+import { ButtonBase, Typography, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
+	recipeGrid: {
+		margin: '5px 0',
+		display: 'flex',
+		justifyContent: 'center'
+	},
 	imageLink: {
 		position: 'relative',
 		height: 200,
-		flex: '0 0 23%',
-		margin: '5px 5px'
+		width: '80%',
+		[theme.breakpoints.up('sm')]: {
+			width: '90%'
+		}
 	},
 	image: {
 		position: 'relative',
 		width: '100%',
-		height: '100%',
+		height: 200, //100%
 		'&:hover, &$focusVisible': {
 			zIndex: 1,
 			'& $imageMarked': {
@@ -47,7 +54,9 @@ const useStyles = makeStyles(theme => ({
 		bottom: 0,
 		backgroundSize: 'cover',
 		backgroundPosition: 'center 40%',
-		borderRadius: '10%'
+		borderRadius: '10%',
+		height: '100%',
+		widht: '100%'
 	},
 	imageBackdrop: {
 		position: 'absolute',
@@ -79,32 +88,34 @@ const useStyles = makeStyles(theme => ({
 
 const Dish = ({ dish }) => {
 	const classes = useStyles();
-	const { name, img } = dish;
+	const { name, img, _id } = dish;
 	return (
-		<Link to={`/${dish.id}`} className={classes.imageLink}>
-			<ButtonBase
-				focusRipple
-				className={classes.image}
-				focusVisibleClassName={classes.focusVisible}
-			>
-				<span
-					className={classes.imageSrc}
-					style={{ backgroundImage: `url(${img})` }}
-				/>
-				<span className={classes.imageBackdrop} />
-				<span className={classes.imageButton}>
-					<Typography
-						component="span"
-						variant="subtitle1"
-						color="inherit"
-						className={classes.imageTitle}
-					>
-						{name}
-						<span className={classes.imageMarked} />
-					</Typography>
-				</span>
-			</ButtonBase>
-		</Link>
+		<Grid item xs={12} sm={4} md={3} className={classes.recipeGrid}>
+			<Link to={`/przepisy/${_id}`} className={classes.imageLink}>
+				<ButtonBase
+					focusRipple
+					className={classes.image}
+					focusVisibleClassName={classes.focusVisible}
+				>
+					<span
+						className={classes.imageSrc}
+						style={{ backgroundImage: `url(${img})` }}
+					/>
+					<span className={classes.imageBackdrop} />
+					<span className={classes.imageButton}>
+						<Typography
+							component="span"
+							variant="subtitle1"
+							color="inherit"
+							className={classes.imageTitle}
+						>
+							{name}
+							<span className={classes.imageMarked} />
+						</Typography>
+					</span>
+				</ButtonBase>
+			</Link>
+		</Grid>
 	);
 };
 

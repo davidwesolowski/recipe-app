@@ -1,15 +1,31 @@
 import React from 'react';
 import { Grid } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import Sidebar from './Sidebar';
-import MainContent from './MainContent';
+import DishList from './DishList';
 
-const Content = ({ classes, searchingWord }) => {
+const useStyles = makeStyles(theme => ({
+	content: {
+		minHeight: 'calc(100% - 75px - 64px)',
+		[theme.breakpoints.up('sm')]: {
+			height: 'calc(100% - 75px - 64px)'
+		}
+	},
+	container: { height: '100%' }
+}));
+
+const Content = ({ searchingWord }) => {
+	const classes = useStyles();
 	return (
-		<Grid item md={12} lg={12} className={classes.content}>
-			<Grid container justify="center" className={classes.container}>
-				<Sidebar />
-				<MainContent searchingWord={searchingWord} />
-			</Grid>
+		// <Grid item xs={12} md={12} lg={12} className={classes.content}>
+		// 	<Grid container justify="center" className={classes.container}>
+		// 		<Sidebar />
+		// 		<DishList searchingWord={searchingWord} />
+		// 	</Grid>
+		// </Grid>
+		<Grid container className={classes.content} justify="center">
+			<Sidebar />
+			<DishList searchingWord={searchingWord} />
 		</Grid>
 	);
 };

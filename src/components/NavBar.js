@@ -1,47 +1,82 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+//import classNames from 'classnames';
 import {
 	AppBar,
-	IconButton,
+	//IconButton,
 	Typography,
-	Toolbar,
-	Grid
+	Toolbar
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { Menu as MenuIcon } from '@material-ui/icons';
+//import { Menu as MenuIcon } from '@material-ui/icons';
 import CreateDish from './CreateDish';
 import SearchDish from './SearchDish';
+import SubMenu from './SubMenu';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
 	title: {
-		flexGrow: 1,
-		display: 'block',
+		display: 'none',
+		[theme.breakpoints.up('sm')]: {
+			display: 'block'
+		}
+	},
+	logo: {
+		display: 'flex',
+		alignItems: 'center',
 		textDecoration: 'none',
-		color: '#fff'
+		color: '#fff',
+		flexGrow: 1
+	},
+	logoImg: {
+		//position: 'absolute',
+		objectFit: 'center',
+		objectPosition: 'center 40%',
+		width: '75px',
+		height: '75px'
 	}
 }));
 
-const NavBar = ({ searchingWord, setSearchingWord }) => {
+const NavBar = ({ searchingWord, setSearchingWord, searchBar, subMenu }) => {
 	const classes = useStyles();
+	let Component;
+	if (searchBar && subMenu) {
+		Component = (
+			<>
+				<SearchDish
+					searchingWord={searchingWord}
+					setSearchingWord={setSearchingWord}
+				/>
+				<CreateDish />
+				<SubMenu />
+			</>
+		);
+	} else if (!searchBar && subMenu) {
+		Component = (
+			<>
+				<CreateDish />
+				<SubMenu />
+			</>
+		);
+	} else {
+		Component = <></>;
+	}
 
 	return (
-		<Grid item md={12} lg={12}>
-			<AppBar position="static">
-				<Toolbar>
-					<IconButton edge="start" color="inherit">
-						<MenuIcon />
-					</IconButton>
-					<Link to="/" className={classes.title}>
-						<Typography variant="h6">CookItSam</Typography>
-					</Link>
-					<SearchDish
-						searchingWord={searchingWord}
-						setSearchingWord={setSearchingWord}
+		<AppBar position="static">
+			<Toolbar>
+				<Link to="/przepisy" className={classes.logo}>
+					<img
+						src="/img/logo.png"
+						alt="logo"
+						className={classes.logoImg}
 					/>
-					<CreateDish />
-				</Toolbar>
-			</AppBar>
-		</Grid>
+					<Typography variant="h6" className={classes.title}>
+						CookItSam
+					</Typography>
+				</Link>
+				{Component}
+			</Toolbar>
+		</AppBar>
 	);
 };
 export default NavBar;
