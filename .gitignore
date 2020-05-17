@@ -1,4 +1,7 @@
 node_modules
 src/copy
 server/db
+.env
+.prettierrc
+.eslintrc.json
 .vscode

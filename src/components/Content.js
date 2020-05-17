@@ -6,7 +6,7 @@ import DishList from './DishList';
 
 const useStyles = makeStyles(theme => ({
 	content: {
-		minHeight: 'calc(100% - 75px - 64px)',
+		minHeight: 'calc(100% - 64px)',
 		[theme.breakpoints.up('sm')]: {
 			height: 'calc(100% - 75px - 64px)'
 		}

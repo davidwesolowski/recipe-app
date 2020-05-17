@@ -16,7 +16,7 @@ import validateRegister from '../validation/validateRegister';
 const useStyles = makeStyles(theme => ({
 	contentGrid: {
 		minHeight: 'calc(100% - 64px - 64px)',
-		minWidth: '100vw'
+		minWidth: '100%'
 	},
 	contentForm: {
 		minHeight: 'calc(100vh - 64px - 64px)',

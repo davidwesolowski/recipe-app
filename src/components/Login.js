@@ -120,6 +120,7 @@ const Login = ({ history: { push } }) => {
 				const authToken = token.split(' ')[1];
 				localStorage.setItem('authToken', JSON.stringify(authToken));
 				setAlertOpen(true);
+				setErrorMessages(prev => ({ ...prev, loginError: '' }));
 				setTimeout(() => {
 					setAlertOpen(false);
 					push('/przepisy');

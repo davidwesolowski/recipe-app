@@ -18,7 +18,7 @@ const dishesReducer = (state = [], action) => {
 			];
 		case EDIT_DISH:
 			return state.map(dish => {
-				if (dish.id == action.payload.id) {
+				if (dish._id == action.payload._id) {
 					return {
 						...dish,
 						...action.payload
@@ -28,7 +28,7 @@ const dishesReducer = (state = [], action) => {
 				}
 			});
 		case REMOVE_DISH:
-			return state.filter(dish => dish.id != action.payload);
+			return state.filter(dish => dish._id != action.payload);
 		default:
 			return state;
 	}

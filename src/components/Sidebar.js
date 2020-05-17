@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import {
 	Grid,
 	Paper,
@@ -11,16 +11,18 @@ import {
 } from '@material-ui/core';
 import { FaFilter } from 'react-icons/fa';
 import { makeStyles } from '@material-ui/core/styles';
-//import Slider from 'react-slick';
 import { RecipeContext } from './RecipeProvider';
 import { setCategory } from '../actions/categoryAction';
 
 const useStyles = makeStyles(theme => ({
 	sidebar: {
-		height: '100%'
+		[theme.breakpoints.up('sm')]: {
+			minHeight: '100%'
+		}
 	},
 	sidebarGrid: {
-		height: '120px',
+		minHeight: '60px',
+		maxHeight: '160px',
 		[theme.breakpoints.up('sm')]: {
 			minHeight: '100%'
 		}
@@ -53,9 +55,18 @@ const useStyles = makeStyles(theme => ({
 		width: '1.5rem'
 	},
 	sidebarList: {
+		display: 'none',
+		[theme.breakpoints.up('sm')]: {
+			overflowY: 'auto',
+			display: 'block',
+			margin: 0
+		}
+	},
+	sidebarDropdown: {
 		display: 'flex',
+		flexFlow: 'row wrap',
 		alignItems: 'center',
-		overflowY: 'visible',
+		overflowY: 'hidden',
 		marginLeft: 5,
 		[theme.breakpoints.up('sm')]: {
 			overflowY: 'auto',
@@ -72,9 +83,10 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-const Products = () => {
+const Sidebar = () => {
 	const classes = useStyles();
 	const { filters, filtersDispatch } = useContext(RecipeContext);
+	const [dropdown, setDropdown] = useState(false);
 	const handleCheck = name => event => {
 		filtersDispatch(setCategory({ [name]: event.target.checked }));
 	};
@@ -82,15 +94,23 @@ const Products = () => {
 	return (
 		<Grid item xs={12} sm={3} md={2} lg={2} className={classes.sidebarGrid}>
 			<Paper className={classes.sidebar}>
-				<div className={classes.sidebarHeader}>
+				<div
+					className={classes.sidebarHeader}
+					role={dropdown ? 'button' : ''}
+					onClick={() => setDropdown(!dropdown)}
+					onKeyDown={() => setDropdown(!dropdown)}
+				>
 					<Typography className={classes.typoHeaderCategory}>
 						Kategorie
 					</Typography>
 					<FaFilter className={classes.filterIcon} />
 				</div>
-				<List className={classes.sidebarList}>
+				<List
+					className={
+						dropdown ? classes.sidebarDropdown : classes.sidebarList
+					}
+				>
 					{Object.keys(filters).length > 0 ? (
-						//<Slider {...settings}>
 						Object.keys(filters).map(category => (
 							<ListItem
 								key={category}
@@ -130,7 +150,6 @@ const Products = () => {
 							</ListItem>
 						))
 					) : (
-						//</Slider>
 						<div className={classes.noCategory}>
 							Tutaj pojawi się kategoria po dodaniu przepisu.{' '}
 							<span role="img" aria-label="smile">
@@ -144,4 +163,4 @@ const Products = () => {
 	);
 };
 
-export default Products;
+export default Sidebar;

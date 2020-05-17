@@ -13,7 +13,8 @@ import {
 	InputLabel,
 	Button,
 	FormHelperText,
-	IconButton
+	IconButton,
+	Snackbar
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Alert } from '@material-ui/lab';
@@ -23,7 +24,7 @@ import { RecipeContext } from './RecipeProvider';
 import { addDish, editDish } from '../actions/dishAction';
 import { setCategory } from '../actions/categoryAction';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
 	addButton: {
 		marginLeft: '5px'
 	},
@@ -37,7 +38,12 @@ const useStyles = makeStyles(() => ({
 		color: '#301b70'
 	},
 	paperScrollPaper: {
-		width: '50vw'
+		width: '100%',
+		margin: 0,
+		[theme.breakpoints.up('md')]: {
+			width: '50vw',
+			margin: 32
+		}
 	},
 	submitButton: {
 		backgroundColor: '#2196f3',
@@ -89,12 +95,26 @@ const useStyles = makeStyles(() => ({
 	imgBar: {
 		display: 'flex',
 		flexDirection: 'column'
+	},
+	'.MuiInputLabel-formControl': {
+		fontSize: '1.3rem'
+	},
+	'.MuiInputBase-input': {
+		fontSize: '1.25rem'
+	},
+	[theme.breakpoints.up('md')]: {
+		'.MuiInputLabel-formControl': {
+			fontSize: '1.1rem'
+		},
+		'.MuiInputBase-input': {
+			fontSize: '1rem'
+		}
 	}
 }));
 
 const Form = props => {
 	const classes = useStyles();
-	const { open, setOpen, dish: editedDish } = props;
+	const { open, setOpen, setRecipeDetail, dish: editedDish } = props;
 	const defaultDish = {
 		name: '',
 		kind: '',
@@ -133,7 +153,9 @@ const Form = props => {
 				localStorage.removeItem('authToken');
 				push('/');
 			}
-			return newRecipe;
+			if (newRecipe) {
+				dishesDispatch(addDish(newRecipe));
+			}
 		} catch (e) {
 			console.error(e); //eslint-disable-line
 		}
@@ -144,11 +166,18 @@ const Form = props => {
 			const token = JSON.parse(localStorage.getItem('authToken'));
 			axios.defaults.headers.common.Authorization = `Bearer ${token}`;
 			const {
-				data: { jwt }
-			} = await axios.patch(`/recipe/${recipe._id}`, recipe);
+				data: { jwt, recipe: editedRecipe }
+			} = await axios.patch(
+				`http://localhost:3000/recipe/${recipe._id}`,
+				recipe
+			);
 			if (jwt) {
 				localStorage.removeItem('authToken');
 				push('/');
+			}
+			if (editedRecipe) {
+				setRecipeDetail(editedRecipe);
+				dishesDispatch(editDish(editedRecipe));
 			}
 		} catch (e) {
 			console.log(e); //eslint-disable-line
@@ -194,12 +223,9 @@ const Form = props => {
 			dish.recipe
 		) {
 			if (!dish._id) {
-				addRecipe(dish).then(newRecipe =>
-					dishesDispatch(addDish(newRecipe))
-				);
+				addRecipe(dish);
 			} else {
 				editRecipe(dish);
-				dishesDispatch(editDish(dish));
 			}
 			setAlertOpen(true);
 			filtersDispatch(setCategory({ [dish.kind]: false }));
@@ -237,7 +263,7 @@ const Form = props => {
 			<DialogTitle>
 				<div className={classes.dialogHeader}>
 					<Typography>
-						{dish.name ? 'Edytuj przepis' : 'Dodaj przepis:'}
+						{editedDish ? 'Edytuj przepis' : 'Dodaj przepis:'}
 					</Typography>
 					<IconButton
 						className={classes.closeButton}
@@ -384,15 +410,25 @@ const Form = props => {
 							{editedDish ? 'Edytuj' : 'Dodaj'}
 						</Button>
 					</FormControl>
-					{alertOpen && (
+					<Snackbar
+						anchorOrigin={{
+							vertical: 'bottom',
+							horizontal: 'right'
+						}}
+						open={alertOpen}
+						autoHideDuration={4000}
+						onClose={() => setAlertOpen(!alertOpen)}
+					>
 						<Alert
 							variant="filled"
 							severity="success"
 							className={classes.alert}
 						>
-							Przepis dodany pomyślnie!
+							{editedDish
+								? 'Przepis edytowany pomyślnie'
+								: 'Przepis dodany pomyślnie!'}
 						</Alert>
-					)}
+					</Snackbar>
 				</form>
 			</DialogContent>
 		</Dialog>

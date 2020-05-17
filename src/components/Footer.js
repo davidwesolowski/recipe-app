@@ -19,7 +19,7 @@ const useStyles = makeStyles(() => ({
 const Footer = () => {
 	const classes = useStyles();
 	return (
-		<AppBar position="static">
+		<AppBar position="static" className={classes.f}>
 			<Toolbar className={classes.footer}>
 				<Typography variant="h6">© Dawid Wesołowski</Typography>
 				<a

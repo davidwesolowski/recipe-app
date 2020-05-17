@@ -24,7 +24,7 @@ router.post('/login', async (req, res) => {
 			const token = jwt.sign(
 				{ _id: userExists._id },
 				process.env.JWT_SECRET,
-				{ expiresIn: '50m' }
+				{ expiresIn: '2h' }
 			);
 			return res.status(200).send({
 				res: 'Zalogowano pomyślnie!',

@@ -87,7 +87,8 @@ const useStyles = makeStyles(theme => ({
 	title: {
 		fontFamily: 'Oswald, sans-serif',
 		fontWeight: '500',
-		fontSize: '1.5rem'
+		fontSize: '1.5rem',
+		marginBottom: 10
 	},
 	otherRecipes: {
 		display: 'flex',
@@ -110,10 +111,10 @@ const useStyles = makeStyles(theme => ({
 	dishesPane: {
 		display: 'flex',
 		flexDirection: 'column',
-		minHeight: 420,
 		overflowY: 'auto',
 		[theme.breakpoints.up('sm')]: {
-			maxHeight: 420
+			maxHeight: 420,
+			alignItems: 'center'
 		}
 	}
 }));
@@ -140,8 +141,12 @@ const DishDetails = ({ dish, history: { push }, match: { params } }) => {
 				push('/');
 			}
 			if (deletedRecipe) {
-				filtersDispatch(removeCategory(dish.kind));
 				dishesDispatch(removeDish(id));
+				if (
+					dishes.filter(recipe => recipe.kind == recipeDetail.kind)
+						.length == 1
+				)
+					filtersDispatch(removeCategory(recipeDetail.kind));
 				push('/przepisy');
 			}
 		} catch (e) {
@@ -167,7 +172,6 @@ const DishDetails = ({ dish, history: { push }, match: { params } }) => {
 			}
 		})();
 	}, []);
-
 	return (
 		<>
 			{recipeDetail && (
@@ -200,7 +204,7 @@ const DishDetails = ({ dish, history: { push }, match: { params } }) => {
 								<DialogActions>
 									<Button
 										onClick={() =>
-											handleRemoveDish(dish._id)
+											handleRemoveDish(recipeDetail._id)
 										}
 									>
 										Usuń
@@ -263,6 +267,7 @@ const DishDetails = ({ dish, history: { push }, match: { params } }) => {
 												<Dish
 													key={dishElement._id}
 													dish={dishElement}
+													detail={true}
 												/>
 											))}
 								</div>
@@ -271,7 +276,12 @@ const DishDetails = ({ dish, history: { push }, match: { params } }) => {
 					</Grid>
 				</Paper>
 			)}
-			<Form open={open} setOpen={setOpen} dish={dish} />
+			<Form
+				open={open}
+				setOpen={setOpen}
+				dish={recipeDetail}
+				setRecipeDetail={setRecipeDetail}
+			/>
 		</>
 	);
 };

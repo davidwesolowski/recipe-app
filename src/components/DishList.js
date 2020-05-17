@@ -34,31 +34,32 @@ const DishList = ({ searchingWord }) => {
 	const { push } = useHistory();
 
 	useEffect(() => {
-		(async function() {
-			const token = JSON.parse(localStorage.getItem('authToken'));
-			axios.defaults.headers.common.Authorization = `Bearer ${token}`;
-			const {
-				data: { recipes, jwtError }
-			} = await axios.get('http://localhost:3000/recipes');
-			if (jwtError) {
-				localStorage.removeItem('authToken');
-				push('/');
-				return;
-			}
-			if (recipes) {
-				const categories = recipes.reduce(
-					(acc, curr) => ({
-						...acc,
-						[curr.kind]: false
-					}),
-					{}
-				);
-				dishesDispatch(setRecipe(recipes));
-				filtersDispatch(setCategory(categories));
-			}
-		})();
+		if (!dishes.length) {
+			(async function() {
+				const token = JSON.parse(localStorage.getItem('authToken'));
+				axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+				const {
+					data: { recipes, jwtError }
+				} = await axios.get('http://localhost:3000/recipes');
+				if (jwtError) {
+					localStorage.removeItem('authToken');
+					push('/');
+					return;
+				}
+				if (recipes) {
+					const categories = recipes.reduce(
+						(acc, curr) => ({
+							...acc,
+							[curr.kind]: false
+						}),
+						{}
+					);
+					dishesDispatch(setRecipe(recipes));
+					filtersDispatch(setCategory(categories));
+				}
+			})();
+		}
 	}, []);
-
 	return (
 		<Grid item xs={12} sm={9} md={10} lg={10}>
 			<Paper className={classes.container}>

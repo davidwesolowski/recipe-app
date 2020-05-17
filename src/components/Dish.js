@@ -7,7 +7,10 @@ const useStyles = makeStyles(theme => ({
 	recipeGrid: {
 		margin: '5px 0',
 		display: 'flex',
-		justifyContent: 'center'
+		justifyContent: 'center',
+		[theme.breakpoints.up('sm')]: {
+			width: '100%'
+		}
 	},
 	imageLink: {
 		position: 'relative',
@@ -86,11 +89,17 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-const Dish = ({ dish }) => {
+const Dish = ({ dish, detail }) => {
 	const classes = useStyles();
 	const { name, img, _id } = dish;
 	return (
-		<Grid item xs={12} sm={4} md={3} className={classes.recipeGrid}>
+		<Grid
+			item
+			xs={12}
+			sm={4}
+			md={detail ? 10 : 3}
+			className={classes.recipeGrid}
+		>
 			<Link to={`/przepisy/${_id}`} className={classes.imageLink}>
 				<ButtonBase
 					focusRipple
