@@ -1,5 +1,8 @@
 node_modules
 src/copy
+store.js
+store_copy.js
+stroe co
 server/db
 .env
 .prettierrc

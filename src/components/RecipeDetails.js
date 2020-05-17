@@ -169,7 +169,6 @@ const RecipeDetails = ({ recipe, history: { push }, match: { params } }) => {
 				const chosenRecipe = newRecipes.find(
 					recipe => recipe._id == params.id
 				);
-				console.log(newRecipes);
 				setRecipeDetail(chosenRecipe);
 				recipesDispatch(setRecipe(newRecipes));
 			}
@@ -257,7 +256,6 @@ const RecipeDetails = ({ recipe, history: { push }, match: { params } }) => {
 									Inne przepisy:
 								</Typography>
 								<div className={classes.recipesPane}>
-									{console.log(recipes)}
 									{recipes.length &&
 										recipes
 											.filter(
