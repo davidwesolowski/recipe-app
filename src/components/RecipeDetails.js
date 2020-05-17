@@ -16,7 +16,7 @@ import { HomeRounded, Edit, Delete } from '@material-ui/icons';
 import { RecipeContext } from './RecipeProvider';
 import Form from './Form';
 import Recipe from './Recipe';
-import { removeRecipe } from '../actions/recipeAction';
+import { setRecipe, removeRecipe } from '../actions/recipeAction';
 import { removeCategory } from '../actions/categoryAction';
 
 const useStyles = makeStyles(theme => ({
@@ -124,7 +124,7 @@ const RecipeDetails = ({ recipe, history: { push }, match: { params } }) => {
 	const [open, setOpen] = useState(false);
 	const [remove, setRemove] = useState(false);
 	const [recipeDetail, setRecipeDetail] = useState(recipe);
-	const { recipes, recipesDispatch, filtersDispatch } = useContext(
+	const { recipes, recipesDispatch, categoriesDispatch } = useContext(
 		RecipeContext
 	);
 	const handleRemoveRecipe = async id => {
@@ -146,7 +146,7 @@ const RecipeDetails = ({ recipe, history: { push }, match: { params } }) => {
 					recipes.filter(recipe => recipe.kind == recipeDetail.kind)
 						.length == 1
 				)
-					filtersDispatch(removeCategory(recipeDetail.kind));
+					categoriesDispatch(removeCategory(recipeDetail.kind));
 				push('/przepisy');
 			}
 		} catch (e) {
@@ -160,15 +160,18 @@ const RecipeDetails = ({ recipe, history: { push }, match: { params } }) => {
 				const token = JSON.parse(localStorage.getItem('authToken'));
 				axios.defaults.headers.common.Authorization = `Bearer ${token}`;
 				const {
-					data: { jwtError, recipe: newRecipe }
-				} = await axios.get(
-					`http://localhost:3000/recipe/${params.id}`
-				);
+					data: { jwtError, recipesGet: newRecipes }
+				} = await axios.get(`http://localhost:3000/recipes`);
 				if (jwtError) {
 					localStorage.removeItem('authToken');
 					push('/');
 				}
-				setRecipeDetail(newRecipe);
+				const chosenRecipe = newRecipes.find(
+					recipe => recipe._id == params.id
+				);
+				console.log(newRecipes);
+				setRecipeDetail(chosenRecipe);
+				recipesDispatch(setRecipe(newRecipes));
 			}
 		})();
 	}, []);
@@ -254,6 +257,7 @@ const RecipeDetails = ({ recipe, history: { push }, match: { params } }) => {
 									Inne przepisy:
 								</Typography>
 								<div className={classes.recipesPane}>
+									{console.log(recipes)}
 									{recipes.length &&
 										recipes
 											.filter(

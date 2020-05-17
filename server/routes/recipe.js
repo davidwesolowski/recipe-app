@@ -56,7 +56,6 @@ router.delete('/recipe', async (req, res) => {
 	try {
 		const id = req.body.id;
 		const deletedRecipe = await Recipe.findByIdAndDelete(id);
-		console.log(deletedRecipe);
 		if (deletedRecipe) return res.status(200).send({ deletedRecipe });
 		return res.send({ error: 'Dany przepis nie istnieje!' });
 	} catch {

@@ -6,7 +6,7 @@ import RecipeList from './RecipeList';
 
 const useStyles = makeStyles(theme => ({
 	content: {
-		minHeight: 'calc(100% - 64px)',
+		minHeight: 'calc(100% - 64px - 75px)',
 		[theme.breakpoints.up('sm')]: {
 			height: 'calc(100% - 75px - 64px)'
 		}

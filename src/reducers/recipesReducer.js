@@ -17,18 +17,18 @@ const recipesReducer = (state = [], action) => {
 				}
 			];
 		case EDIT_RECIPE:
-			return state.map(dish => {
-				if (dish._id == action.payload._id) {
+			return state.map(recipe => {
+				if (recipe._id == action.payload._id) {
 					return {
-						...dish,
+						...recipe,
 						...action.payload
 					};
 				} else {
-					return dish;
+					return recipe;
 				}
 			});
 		case REMOVE_RECIPE:
-			return state.filter(dish => dish._id != action.payload);
+			return state.filter(recipe => recipe._id != action.payload);
 		default:
 			return state;
 	}

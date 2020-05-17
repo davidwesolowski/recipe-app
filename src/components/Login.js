@@ -31,15 +31,16 @@ const useStyles = makeStyles(theme => ({
 		}
 	},
 	formBox: {
-		boxShadow: '1px 1px 6px 2px #071d80',
+		boxShadow: '0 .5rem 3rem #071d8033',
 		minWidth: '100%',
 		minHeight: '100%',
+		padding: '1.5rem 2rem',
 		[theme.breakpoints.up('sm')]: {
-			minWidth: '55%',
+			minWidth: '40%',
 			minHeight: '55%'
 		},
 		[theme.breakpoints.up('md')]: {
-			minWidth: '45%',
+			minWidth: '30%',
 			minHeight: '45%'
 		}
 	},
