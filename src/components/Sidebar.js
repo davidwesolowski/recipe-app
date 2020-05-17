@@ -85,10 +85,10 @@ const useStyles = makeStyles(theme => ({
 
 const Sidebar = () => {
 	const classes = useStyles();
-	const { filters, filtersDispatch } = useContext(RecipeContext);
+	const { categories, categoriesDispatch } = useContext(RecipeContext);
 	const [dropdown, setDropdown] = useState(false);
 	const handleCheck = name => event => {
-		filtersDispatch(setCategory({ [name]: event.target.checked }));
+		categoriesDispatch(setCategory({ [name]: event.target.checked }));
 	};
 
 	return (
@@ -110,8 +110,8 @@ const Sidebar = () => {
 						dropdown ? classes.sidebarDropdown : classes.sidebarList
 					}
 				>
-					{Object.keys(filters).length > 0 ? (
-						Object.keys(filters).map(category => (
+					{Object.keys(categories).length > 0 ? (
+						Object.keys(categories).map(category => (
 							<ListItem
 								key={category}
 								classes={{ root: classes.listItem }}
@@ -122,7 +122,7 @@ const Sidebar = () => {
 											<Checkbox
 												value="secondary"
 												color="primary"
-												checked={filters[category]}
+												checked={categories[category]}
 												onChange={handleCheck(category)}
 												inputProps={{
 													'aria-label':

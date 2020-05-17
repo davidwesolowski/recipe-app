@@ -15,8 +15,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { HomeRounded, Edit, Delete } from '@material-ui/icons';
 import { RecipeContext } from './RecipeProvider';
 import Form from './Form';
-import Dish from './Dish';
-import { removeDish } from '../actions/dishAction';
+import Recipe from './Recipe';
+import { removeRecipe } from '../actions/recipeAction';
 import { removeCategory } from '../actions/categoryAction';
 
 const useStyles = makeStyles(theme => ({
@@ -108,7 +108,7 @@ const useStyles = makeStyles(theme => ({
 		fontSize: '1.2rem',
 		whiteSpace: 'pre-wrap'
 	},
-	dishesPane: {
+	recipesPane: {
 		display: 'flex',
 		flexDirection: 'column',
 		overflowY: 'auto',
@@ -119,15 +119,15 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-const DishDetails = ({ dish, history: { push }, match: { params } }) => {
+const RecipeDetails = ({ recipe, history: { push }, match: { params } }) => {
 	const classes = useStyles();
 	const [open, setOpen] = useState(false);
 	const [remove, setRemove] = useState(false);
-	const [recipeDetail, setRecipeDetail] = useState(dish);
-	const { dishes, dishesDispatch, filtersDispatch } = useContext(
+	const [recipeDetail, setRecipeDetail] = useState(recipe);
+	const { recipes, recipesDispatch, filtersDispatch } = useContext(
 		RecipeContext
 	);
-	const handleRemoveDish = async id => {
+	const handleRemoveRecipe = async id => {
 		try {
 			const token = JSON.parse(localStorage.getItem('authToken'));
 			axios.defaults.headers.common.Authorization = `Bearer ${token}`;
@@ -141,9 +141,9 @@ const DishDetails = ({ dish, history: { push }, match: { params } }) => {
 				push('/');
 			}
 			if (deletedRecipe) {
-				dishesDispatch(removeDish(id));
+				recipesDispatch(removeRecipe(id));
 				if (
-					dishes.filter(recipe => recipe.kind == recipeDetail.kind)
+					recipes.filter(recipe => recipe.kind == recipeDetail.kind)
 						.length == 1
 				)
 					filtersDispatch(removeCategory(recipeDetail.kind));
@@ -156,7 +156,7 @@ const DishDetails = ({ dish, history: { push }, match: { params } }) => {
 
 	useEffect(() => {
 		(async function() {
-			if (!dish) {
+			if (!recipe) {
 				const token = JSON.parse(localStorage.getItem('authToken'));
 				axios.defaults.headers.common.Authorization = `Bearer ${token}`;
 				const {
@@ -204,7 +204,7 @@ const DishDetails = ({ dish, history: { push }, match: { params } }) => {
 								<DialogActions>
 									<Button
 										onClick={() =>
-											handleRemoveDish(recipeDetail._id)
+											handleRemoveRecipe(recipeDetail._id)
 										}
 									>
 										Usuń
@@ -253,20 +253,20 @@ const DishDetails = ({ dish, history: { push }, match: { params } }) => {
 								<Typography className={classes.title}>
 									Inne przepisy:
 								</Typography>
-								<div className={classes.dishesPane}>
-									{dishes.length &&
-										dishes
+								<div className={classes.recipesPane}>
+									{recipes.length &&
+										recipes
 											.filter(
-												dishElement =>
-													dishElement.kind ===
+												recipeElement =>
+													recipeElement.kind ===
 														recipeDetail.kind &&
-													dishElement.name !==
+													recipeElement.name !==
 														recipeDetail.name
 											)
-											.map(dishElement => (
-												<Dish
-													key={dishElement._id}
-													dish={dishElement}
+											.map(recipeElement => (
+												<Recipe
+													key={recipeElement._id}
+													recipe={recipeElement}
 													detail={true}
 												/>
 											))}
@@ -279,11 +279,11 @@ const DishDetails = ({ dish, history: { push }, match: { params } }) => {
 			<Form
 				open={open}
 				setOpen={setOpen}
-				dish={recipeDetail}
+				recipe={recipeDetail}
 				setRecipeDetail={setRecipeDetail}
 			/>
 		</>
 	);
 };
 
-export default DishDetails;
+export default RecipeDetails;

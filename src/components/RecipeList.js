@@ -4,8 +4,8 @@ import axios from 'axios';
 import { Paper, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { RecipeContext } from './RecipeProvider';
-import Dish from './Dish';
-import { setRecipe } from '../actions/dishAction';
+import Recipe from './Recipe';
+import { setRecipe } from '../actions/recipeAction';
 import { setCategory } from '../actions/categoryAction';
 
 const useStyles = makeStyles(() => ({
@@ -25,37 +25,42 @@ const useStyles = makeStyles(() => ({
 	}
 }));
 
-const DishList = ({ searchingWord }) => {
+const RecipeList = ({ searchingWord }) => {
 	const classes = useStyles();
-	const { dishes, filters, dishesDispatch, filtersDispatch } = useContext(
-		RecipeContext
+	const {
+		recipes,
+		categories,
+		recipesDispatch,
+		categoriesDispatch
+	} = useContext(RecipeContext);
+	const filterValues = Object.values(categories).every(
+		value => value === false
 	);
-	const filterValues = Object.values(filters).every(value => value === false);
 	const { push } = useHistory();
 
 	useEffect(() => {
-		if (!dishes.length) {
+		if (!recipes.length) {
 			(async function() {
 				const token = JSON.parse(localStorage.getItem('authToken'));
 				axios.defaults.headers.common.Authorization = `Bearer ${token}`;
 				const {
-					data: { recipes, jwtError }
+					data: { recipesGet, jwtError }
 				} = await axios.get('http://localhost:3000/recipes');
 				if (jwtError) {
 					localStorage.removeItem('authToken');
 					push('/');
 					return;
 				}
-				if (recipes) {
-					const categories = recipes.reduce(
+				if (recipesGet) {
+					const categories = recipesGet.reduce(
 						(acc, curr) => ({
 							...acc,
 							[curr.kind]: false
 						}),
 						{}
 					);
-					dishesDispatch(setRecipe(recipes));
-					filtersDispatch(setCategory(categories));
+					recipesDispatch(setRecipe(recipesGet));
+					categoriesDispatch(setCategory(categories));
 				}
 			})();
 		}
@@ -64,24 +69,24 @@ const DishList = ({ searchingWord }) => {
 		<Grid item xs={12} sm={9} md={10} lg={10}>
 			<Paper className={classes.container}>
 				<Grid container className={classes.root}>
-					{dishes.length > 0 ? (
+					{recipes.length > 0 ? (
 						filterValues === true ? (
-							dishes
-								.filter(dish =>
-									dish.name
+							recipes
+								.filter(recipe =>
+									recipe.name
 										.toUpperCase()
 										.includes(searchingWord.toUpperCase())
 								)
-								.map(dish => (
-									<Dish key={dish._id} dish={dish} />
+								.map(recipe => (
+									<Recipe key={recipe._id} recipe={recipe} />
 								))
 						) : (
-							dishes
-								.filter(dish => {
+							recipes
+								.filter(recipe => {
 									if (
-										dish.kind in filters &&
-										filters[dish.kind] &&
-										dish.name
+										recipe.kind in categories &&
+										categories[recipe.kind] &&
+										recipe.name
 											.toUpperCase()
 											.includes(
 												searchingWord.toUpperCase()
@@ -90,8 +95,8 @@ const DishList = ({ searchingWord }) => {
 										return true;
 									return false;
 								})
-								.map(dish => (
-									<Dish key={dish._id} dish={dish} />
+								.map(recipe => (
+									<Recipe key={recipe._id} recipe={recipe} />
 								))
 						)
 					) : (
@@ -109,4 +114,4 @@ const DishList = ({ searchingWord }) => {
 	);
 };
 
-export default DishList;
+export default RecipeList;

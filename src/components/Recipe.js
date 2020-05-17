@@ -89,9 +89,9 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-const Dish = ({ dish, detail }) => {
+const Recipe = ({ recipe, detail }) => {
 	const classes = useStyles();
-	const { name, img, _id } = dish;
+	const { name, img, _id } = recipe;
 	return (
 		<Grid
 			item
@@ -128,4 +128,4 @@ const Dish = ({ dish, detail }) => {
 	);
 };
 
-export default Dish;
+export default Recipe;

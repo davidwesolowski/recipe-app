@@ -13,7 +13,7 @@ const useStyles = makeStyles(() => ({
 	}
 }));
 
-const CreateDish = () => {
+const CreateRecipe = () => {
 	const classes = useStyles();
 	const [open, setOpen] = useState(false);
 	return (
@@ -32,4 +32,4 @@ const CreateDish = () => {
 	);
 };
 
-export default CreateDish;
+export default CreateRecipe;

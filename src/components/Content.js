@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Sidebar from './Sidebar';
-import DishList from './DishList';
+import RecipeList from './RecipeList';
 
 const useStyles = makeStyles(theme => ({
 	content: {
@@ -17,15 +17,9 @@ const useStyles = makeStyles(theme => ({
 const Content = ({ searchingWord }) => {
 	const classes = useStyles();
 	return (
-		// <Grid item xs={12} md={12} lg={12} className={classes.content}>
-		// 	<Grid container justify="center" className={classes.container}>
-		// 		<Sidebar />
-		// 		<DishList searchingWord={searchingWord} />
-		// 	</Grid>
-		// </Grid>
 		<Grid container className={classes.content} justify="center">
 			<Sidebar />
-			<DishList searchingWord={searchingWord} />
+			<RecipeList searchingWord={searchingWord} />
 		</Grid>
 	);
 };

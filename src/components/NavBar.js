@@ -1,16 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-//import classNames from 'classnames';
-import {
-	AppBar,
-	//IconButton,
-	Typography,
-	Toolbar
-} from '@material-ui/core';
+import { AppBar, Typography, Toolbar } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-//import { Menu as MenuIcon } from '@material-ui/icons';
-import CreateDish from './CreateDish';
-import SearchDish from './SearchDish';
+import CreateRecipe from './CreateRecipe';
+import SearchRecipe from './SearchRecipe';
 import SubMenu from './SubMenu';
 
 const useStyles = makeStyles(theme => ({
@@ -42,18 +35,18 @@ const NavBar = ({ searchingWord, setSearchingWord, searchBar, subMenu }) => {
 	if (searchBar && subMenu) {
 		Component = (
 			<>
-				<SearchDish
+				<SearchRecipe
 					searchingWord={searchingWord}
 					setSearchingWord={setSearchingWord}
 				/>
-				<CreateDish />
+				<CreateRecipe />
 				<SubMenu />
 			</>
 		);
 	} else if (!searchBar && subMenu) {
 		Component = (
 			<>
-				<CreateDish />
+				<CreateRecipe />
 				<SubMenu />
 			</>
 		);

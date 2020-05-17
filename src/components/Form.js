@@ -21,7 +21,7 @@ import { Alert } from '@material-ui/lab';
 import { Close as CloseIcon } from '@material-ui/icons';
 import { FaFileUpload } from 'react-icons/fa';
 import { RecipeContext } from './RecipeProvider';
-import { addDish, editDish } from '../actions/dishAction';
+import { addRecipe, editRecipe } from '../actions/recipeAction';
 import { setCategory } from '../actions/categoryAction';
 
 const useStyles = makeStyles(theme => ({
@@ -114,8 +114,8 @@ const useStyles = makeStyles(theme => ({
 
 const Form = props => {
 	const classes = useStyles();
-	const { open, setOpen, setRecipeDetail, dish: editedDish } = props;
-	const defaultDish = {
+	const { open, setOpen, setRecipeDetail, recipe: editedRecipe } = props;
+	const defaultRecipe = {
 		name: '',
 		kind: '',
 		img: '',
@@ -129,20 +129,20 @@ const Form = props => {
 		ingredients: false,
 		recipe: false
 	};
-	const [dish, setDish] = useState(defaultDish);
+	const [recipe, setRecipe] = useState(defaultRecipe);
 	const [alertOpen, setAlertOpen] = useState(false);
 	const [newCategory, setNewCategory] = useState(false);
 	const [textFieldsState, setTextFieldsState] = useState(
 		defaultTextFieldState
 	);
 	const file = useRef(null);
-	file.current = dish.img || null;
-	const { filters, filtersDispatch, dishesDispatch } = useContext(
+	file.current = recipe.img || null;
+	const { categories, categoriesDispatch, recipesDispatch } = useContext(
 		RecipeContext
 	);
 	const { push } = useHistory();
 
-	const addRecipe = async recipe => {
+	const addNewRecipe = async recipe => {
 		try {
 			const token = JSON.parse(localStorage.getItem('authToken'));
 			axios.defaults.headers.common.Authorization = `Bearer ${token}`;
@@ -154,14 +154,14 @@ const Form = props => {
 				push('/');
 			}
 			if (newRecipe) {
-				dishesDispatch(addDish(newRecipe));
+				recipesDispatch(addRecipe(newRecipe));
 			}
 		} catch (e) {
 			console.error(e); //eslint-disable-line
 		}
 	};
 
-	const editRecipe = async recipe => {
+	const editOldRecipe = async recipe => {
 		try {
 			const token = JSON.parse(localStorage.getItem('authToken'));
 			axios.defaults.headers.common.Authorization = `Bearer ${token}`;
@@ -177,7 +177,7 @@ const Form = props => {
 			}
 			if (editedRecipe) {
 				setRecipeDetail(editedRecipe);
-				dishesDispatch(editDish(editedRecipe));
+				recipesDispatch(editRecipe(editedRecipe));
 			}
 		} catch (e) {
 			console.log(e); //eslint-disable-line
@@ -189,7 +189,7 @@ const Form = props => {
 		if (event.target.value === 'Create new') {
 			setNewCategory(true);
 		} else {
-			setDish(prev => ({
+			setRecipe(prev => ({
 				...prev,
 				[name]: event.target.value
 			}));
@@ -207,31 +207,31 @@ const Form = props => {
 	};
 	const handleSubmit = event => {
 		event.preventDefault();
-		dish.img = file.current;
+		recipe.img = file.current;
 		const textFields = Object.keys(textFieldsState).reduce(
 			(acc, curr) => ({
 				...acc,
-				[curr]: !dish[curr]
+				[curr]: !recipe[curr]
 			}),
 			{}
 		);
 		if (
-			dish.name &&
-			dish.kind &&
-			dish.img &&
-			dish.ingredients &&
-			dish.recipe
+			recipe.name &&
+			recipe.kind &&
+			recipe.img &&
+			recipe.ingredients &&
+			recipe.recipe
 		) {
-			if (!dish._id) {
-				addRecipe(dish);
+			if (!recipe._id) {
+				addNewRecipe(recipe);
 			} else {
-				editRecipe(dish);
+				editOldRecipe(recipe);
 			}
 			setAlertOpen(true);
-			filtersDispatch(setCategory({ [dish.kind]: false }));
+			categoriesDispatch(setCategory({ [recipe.kind]: false }));
 			setTimeout(() => {
 				setOpen(!open);
-				setDish(defaultDish);
+				setRecipe(defaultRecipe);
 				setTextFieldsState(defaultTextFieldState);
 				setNewCategory(false);
 				setAlertOpen(false);
@@ -244,7 +244,7 @@ const Form = props => {
 
 	/*eslint-disable*/
 	useEffect(() => {
-		setDish(editedDish || defaultDish);
+		setRecipe(editedRecipe || defaultRecipe);
 	}, [props]);
 	/*eslint-enable*/
 	return (
@@ -252,10 +252,10 @@ const Form = props => {
 			open={open}
 			onClose={() => {
 				setOpen(!open);
-				setDish(editedDish || defaultDish);
+				setRecipe(editedRecipe || defaultRecipe);
 				setTextFieldsState(defaultTextFieldState);
 				setNewCategory(false);
-				file.current = dish.img || null;
+				file.current = recipe.img || null;
 			}}
 			scroll="paper"
 			classes={{ paperScrollPaper: classes.paperScrollPaper }}
@@ -263,16 +263,16 @@ const Form = props => {
 			<DialogTitle>
 				<div className={classes.dialogHeader}>
 					<Typography>
-						{editedDish ? 'Edytuj przepis' : 'Dodaj przepis:'}
+						{editedRecipe ? 'Edytuj przepis' : 'Dodaj przepis:'}
 					</Typography>
 					<IconButton
 						className={classes.closeButton}
 						onClick={() => {
 							setOpen(!open);
-							setDish(editedDish || defaultDish);
+							setRecipe(editedRecipe || defaultRecipe);
 							setTextFieldsState(defaultTextFieldState);
 							setNewCategory(false);
-							file.current = dish.img || null;
+							file.current = recipe.img || null;
 						}}
 					>
 						<CloseIcon
@@ -291,7 +291,7 @@ const Form = props => {
 									<TextField
 										label="Nazwa"
 										className={classes.field}
-										value={dish.name}
+										value={recipe.name}
 										onChange={handleInput('name')}
 										error={textFieldsState.name}
 									/>
@@ -304,7 +304,7 @@ const Form = props => {
 										<TextField
 											label="Kategoria"
 											className={classes.field}
-											value={dish.kind}
+											value={recipe.kind}
 											onChange={handleInput('kind')}
 											error={textFieldsState.kind}
 										/>
@@ -314,7 +314,7 @@ const Form = props => {
 												Kategoria
 											</InputLabel>
 											<Select
-												value={dish.kind}
+												value={recipe.kind}
 												onChange={handleInput('kind')}
 												labelId="kind-id"
 												className={classes.field}
@@ -324,7 +324,7 @@ const Form = props => {
 													Dodaj nową kategorię
 												</MenuItem>
 
-												{Object.keys(filters).map(
+												{Object.keys(categories).map(
 													filter => (
 														<MenuItem
 															key={filter}
@@ -355,7 +355,7 @@ const Form = props => {
 										multiline
 										label="Składniki"
 										className={classes.field}
-										value={dish.ingredients}
+										value={recipe.ingredients}
 										onChange={handleInput('ingredients')}
 										error={textFieldsState.ingredients}
 									/>
@@ -369,7 +369,7 @@ const Form = props => {
 										multiline
 										label="Przepis"
 										className={classes.field}
-										value={dish.recipe}
+										value={recipe.recipe}
 										onChange={handleInput('recipe')}
 										error={textFieldsState.recipe}
 									/>
@@ -407,7 +407,7 @@ const Form = props => {
 							</div>
 						</div>
 						<Button className={classes.submitButton} type="submit">
-							{editedDish ? 'Edytuj' : 'Dodaj'}
+							{editedRecipe ? 'Edytuj' : 'Dodaj'}
 						</Button>
 					</FormControl>
 					<Snackbar
@@ -424,7 +424,7 @@ const Form = props => {
 							severity="success"
 							className={classes.alert}
 						>
-							{editedDish
+							{editedRecipe
 								? 'Przepis edytowany pomyślnie'
 								: 'Przepis dodany pomyślnie!'}
 						</Alert>

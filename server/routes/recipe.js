@@ -8,7 +8,7 @@ router.get('/recipes', validAuth, async (req, res) => {
 	try {
 		const _id = req.user._id;
 		const recipes = await Recipe.find({ user: _id }).exec();
-		return res.status(200).send({ recipes });
+		return res.status(200).send({ recipesGet: recipes });
 	} catch (error) {
 		return res.status(400).send({ error: 'Nie ma żadnych przepisów!' });
 	}

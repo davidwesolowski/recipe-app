@@ -1,5 +1,6 @@
 import { SET_CATEGORY, REMOVE_CATEGORY } from '../actions/actionsDefinition';
-const filtersReducer = (state, action) => {
+
+const categoriesReducer = (state, action) => {
 	switch (action.type) {
 		case SET_CATEGORY:
 			return {
@@ -21,4 +22,4 @@ const filtersReducer = (state, action) => {
 	}
 };
 
-export default filtersReducer;
+export default categoriesReducer;

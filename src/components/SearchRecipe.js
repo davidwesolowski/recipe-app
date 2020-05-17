@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-const SearchDish = ({ searchingWord, setSearchingWord }) => {
+const SearchRecipe = ({ searchingWord, setSearchingWord }) => {
 	const classes = useStyles();
 	return (
 		<div className={classes.search}>
@@ -55,4 +55,4 @@ const SearchDish = ({ searchingWord, setSearchingWord }) => {
 	);
 };
 
-export default SearchDish;
+export default SearchRecipe;

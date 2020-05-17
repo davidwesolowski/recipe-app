@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 import Content from '../components/Content';
-import DishDetails from '../components/DishDetails';
+import RecipeDetails from '../components/RecipeDetails';
 import Footer from '../components/Footer';
 import Login from '../components/Login';
 import Register from '../components/Register';
@@ -19,7 +19,7 @@ const AppRoute = () => {
 	const [searchingWord, setSearchingWord] = useState('');
 	const [searchBar, setSearchBar] = useState(true);
 	const [subMenu, setSubMenu] = useState(false);
-	const { dishes } = useContext(RecipeContext);
+	const { recipes } = useContext(RecipeContext);
 	return (
 		<Router>
 			<NavBar
@@ -80,8 +80,8 @@ const AppRoute = () => {
 				<Route
 					path="/przepisy/:id"
 					render={props => {
-						const dish = dishes.find(
-							dish => dish._id == props.match.params.id
+						const recipe = recipes.find(
+							recipe => recipe._id == props.match.params.id
 						);
 						const authToken = JSON.parse(
 							localStorage.getItem('authToken')
@@ -89,7 +89,7 @@ const AppRoute = () => {
 						if (authToken) {
 							setSearchBar(false);
 							setSubMenu(true);
-							return <DishDetails {...props} dish={dish} />;
+							return <RecipeDetails {...props} recipe={recipe} />;
 						}
 						return <Redirect to="/" />;
 					}}

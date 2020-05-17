@@ -1,20 +1,20 @@
 import React, { createContext, useReducer } from 'react';
-import dishesReducer from '../reducers/dishesReducer';
-import filtersReducer from '../reducers/filtersReducer';
+import recipesReducer from '../reducers/recipesReducer';
+import categoriesReducer from '../reducers/categoriesReducer';
 
 export const RecipeContext = createContext();
 
 const RecipeProvider = ({ children }) => {
-	const [dishes, dishesDispatch] = useReducer(dishesReducer, []);
-	const [filters, filtersDispatch] = useReducer(filtersReducer, {});
+	const [recipes, recipesDispatch] = useReducer(recipesReducer, []);
+	const [categories, categoriesDispatch] = useReducer(categoriesReducer, {});
 
 	return (
 		<RecipeContext.Provider
 			value={{
-				dishes,
-				dishesDispatch,
-				filters,
-				filtersDispatch
+				recipes,
+				recipesDispatch,
+				categories,
+				categoriesDispatch
 			}}
 		>
 			{children}
