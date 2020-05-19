@@ -2,8 +2,8 @@ import { Router } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../models/User';
-import validateRegister from '../../src/validation/validateRegister';
-import validateLogin from '../../src/validation/validateLogin';
+import validateRegister from '../validation/validateRegister';
+import validateLogin from '../validation/validateLogin';
 const router = Router();
 
 router.post('/login', async (req, res) => {

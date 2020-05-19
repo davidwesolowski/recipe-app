@@ -45,7 +45,7 @@ const RecipeList = ({ searchingWord }) => {
 				axios.defaults.headers.common.Authorization = `Bearer ${token}`;
 				const {
 					data: { recipesGet, jwtError }
-				} = await axios.get('http://localhost:3000/recipes');
+				} = await axios.get('/recipes');
 				if (jwtError) {
 					localStorage.removeItem('authToken');
 					push('/');

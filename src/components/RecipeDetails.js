@@ -116,6 +116,14 @@ const useStyles = makeStyles(theme => ({
 			maxHeight: 420,
 			alignItems: 'center'
 		}
+	},
+	loadingText: {
+		fontFamily: 'Oswald, sans-serif',
+		fontWeight: '400',
+		fontSize: '2.5rem',
+		textAlign: 'center',
+		minHeight: 'calc(100% - 75px - 64px)',
+		paddingTop: '8rem'
 	}
 }));
 
@@ -133,7 +141,7 @@ const RecipeDetails = ({ recipe, history: { push }, match: { params } }) => {
 			axios.defaults.headers.common.Authorization = `Bearer ${token}`;
 			const {
 				data: { deletedRecipe, jwtError }
-			} = await axios.delete('http://localhost:3000/recipe', {
+			} = await axios.delete('/recipe', {
 				data: { id }
 			});
 			if (jwtError) {
@@ -161,7 +169,7 @@ const RecipeDetails = ({ recipe, history: { push }, match: { params } }) => {
 				axios.defaults.headers.common.Authorization = `Bearer ${token}`;
 				const {
 					data: { jwtError, recipesGet: newRecipes }
-				} = await axios.get(`http://localhost:3000/recipes`);
+				} = await axios.get(`/recipes`);
 				if (jwtError) {
 					localStorage.removeItem('authToken');
 					push('/');
@@ -169,14 +177,17 @@ const RecipeDetails = ({ recipe, history: { push }, match: { params } }) => {
 				const chosenRecipe = newRecipes.find(
 					recipe => recipe._id == params.id
 				);
+				chosenRecipe;
 				setRecipeDetail(chosenRecipe);
 				recipesDispatch(setRecipe(newRecipes));
+			} else {
+				setRecipeDetail(recipe);
 			}
 		})();
-	}, []);
+	}, [recipe]);
 	return (
 		<>
-			{recipeDetail && (
+			{recipeDetail ? (
 				<Paper className={classes.contentDetails}>
 					<div className={classes.recipeHeader}>
 						<Typography className={classes.recipeName}>
@@ -277,6 +288,13 @@ const RecipeDetails = ({ recipe, history: { push }, match: { params } }) => {
 						</Grid>
 					</Grid>
 				</Paper>
+			) : (
+				<div className={classes.loadingText}>
+					Jeszcze chwila i zobaczysz swój przepyszny przepis!
+					<span role="img" aria-label="smile">
+						😊
+					</span>
+				</div>
 			)}
 			<Form
 				open={open}

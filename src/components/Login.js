@@ -77,6 +77,7 @@ const useStyles = makeStyles(theme => ({
 	},
 	registerLink: {
 		textDecoration: 'none',
+		color: '#000',
 		'& > p': {
 			fontFamily: 'Frank Ruhl Libre, serif',
 			fontWeight: '400',
@@ -114,7 +115,7 @@ const Login = ({ history: { push } }) => {
 		try {
 			const {
 				data: { token, error }
-			} = await axios.post('http://localhost:3000/login', user);
+			} = await axios.post('/login', user);
 			if (!error) {
 				if (localStorage.getItem('authToken'))
 					localStorage.removeItem('authToken');
@@ -134,6 +135,7 @@ const Login = ({ history: { push } }) => {
 				...prev,
 				loginError: error
 			}));
+			setTimeout(() => setAlertOpen(false), 2000);
 		} catch (e) {
 			throw new Error('Error in login user');
 		}

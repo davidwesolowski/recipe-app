@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import Recipe from '../models/Recipe';
-import validateRecipe from '../../src/validation/validateRecipe';
+import validateRecipe from '../validation/validateRecipe';
 import validAuth from '../middlewares/validAuth';
 const router = Router();
 

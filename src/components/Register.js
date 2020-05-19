@@ -10,6 +10,7 @@ import {
 	Typography,
 	Grid
 } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
 import validateRegister from '../validation/validateRegister';
 
@@ -109,15 +110,22 @@ const Register = ({ history: { push } }) => {
 	const [formData, setFormData] = useState(defaultFormData);
 	const [formDataState, setFormDataState] = useState(defaultFormDataState);
 	const [errorMessages, setErrorMessages] = useState(defaultErrorMesssages);
+	const [error, setError] = useState(false);
+	const [alert, setAlert] = useState(false);
 
 	const registerUser = async user => {
 		try {
 			const {
 				data: { error }
-			} = await axios.post('http://localhost:3000/signUp', user);
+			} = await axios.post('/signUp', user);
 			if (!error) {
 				setFormData(defaultFormData);
-				push('/');
+				setAlert(true);
+				setTimeout(() => {
+					setError(false);
+					setAlert(false);
+					push('/');
+				}, 1000);
 				return;
 			}
 			setErrorMessages(prev => ({
@@ -180,6 +188,12 @@ const Register = ({ history: { push } }) => {
 				...prev,
 				...errorMessage
 			}));
+			setAlert(true);
+			setError(true);
+			setTimeout(() => {
+				setAlert(false);
+				setError(false);
+			}, 1000);
 		}
 	};
 
@@ -269,6 +283,16 @@ const Register = ({ history: { push } }) => {
 								errorMessages.createError}
 						</FormHelperText>
 					</form>
+					{alert && (
+						<Alert
+							variant="filled"
+							severity={error ? 'error' : 'success'}
+						>
+							{error
+								? 'Utworzenie konta nie powiodło się!'
+								: 'Utworzenie konta przebiegło pomyślnie!'}
+						</Alert>
+					)}
 				</div>
 			</Paper>
 		</Grid>

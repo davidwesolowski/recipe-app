@@ -10,8 +10,10 @@ const useStyles = makeStyles(() => ({
 	},
 	linkItem: {
 		textDecoration: 'none',
-		'&:active': {
-			color: '#283593'
+		color: '#000',
+		'&:active, &:hover': {
+			color: '#283593',
+			fontWeight: 500
 		}
 	}
 }));
@@ -43,14 +45,6 @@ const SubMenu = () => {
 				onClose={handleClose}
 				TransitionComponent={Fade}
 			>
-				<Link to="/" className={classes.linkItem}>
-					<MenuItem
-						className={classes.menuItem}
-						onClick={handleClose}
-					>
-						Konto
-					</MenuItem>
-				</Link>
 				<Link to="/" className={classes.linkItem}>
 					<MenuItem onClick={handleLogOut}>Wyloguj się</MenuItem>
 				</Link>

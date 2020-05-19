@@ -148,7 +148,7 @@ const Form = props => {
 			axios.defaults.headers.common.Authorization = `Bearer ${token}`;
 			const {
 				data: { jwtError, recipe: newRecipe }
-			} = await axios.post('http://localhost:3000/recipe', recipe);
+			} = await axios.post('/recipe', recipe);
 			if (jwtError) {
 				localStorage.removeItem('authToken');
 				push('/');
@@ -167,10 +167,7 @@ const Form = props => {
 			axios.defaults.headers.common.Authorization = `Bearer ${token}`;
 			const {
 				data: { jwt, recipe: editedRecipe }
-			} = await axios.patch(
-				`http://localhost:3000/recipe/${recipe._id}`,
-				recipe
-			);
+			} = await axios.patch(`/recipe/${recipe._id}`, recipe);
 			if (jwt) {
 				localStorage.removeItem('authToken');
 				push('/');

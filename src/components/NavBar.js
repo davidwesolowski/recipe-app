@@ -21,7 +21,6 @@ const useStyles = makeStyles(theme => ({
 		flexGrow: 1
 	},
 	logoImg: {
-		//position: 'absolute',
 		objectFit: 'center',
 		objectPosition: 'center 40%',
 		width: '75px',
