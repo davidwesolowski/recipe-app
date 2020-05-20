@@ -2,7 +2,7 @@
 
 ## https://wesolowski-recipe-app.herokuapp.com/
 
-## You can check app using login: test@test.pl password: test123
+### You can check app using `login: test@test.pl` `password: test123`
 
 ## Available scripts
 
